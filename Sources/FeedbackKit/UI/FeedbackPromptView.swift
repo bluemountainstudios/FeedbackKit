@@ -122,10 +122,9 @@ public struct FeedbackPromptView: View {
                 return
             }
             self.appReviewURL = appReviewURL
+            self.calculateInitialPromptStrings()
 
-            await self.calculateInitialPromptStrings()
-
-            try? await Task.sleep(nanoseconds: 2_000_000_000) // 1 sec
+            try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 sec
             self.state = .initialPrompt(showEntirePrompt: true)
         }
         .animation(.easeInOut(duration: 0.5), value: self.state)
@@ -217,18 +216,10 @@ extension FeedbackPromptView {
 
     }
 
-    private func calculateInitialPromptStrings() async {
+    private func calculateInitialPromptStrings() {
         let config = FeedbackKit.shared.config
         self.appName = config?.appName ?? "the app"
-
-        let daysUsingTheAppString: String
-        if let daysUsingTheApp = await FeedbackKit.shared.calculateNumberOfDaysUsingTheApp() {
-            daysUsingTheAppString = "\(daysUsingTheApp)"
-        } else {
-            daysUsingTheAppString = "a few"
-        }
-
-        self.title = "Congrats on using \(config?.appName ?? "the app")\nfor \(daysUsingTheAppString) days!"
+        self.title = "Thanks for using \(config?.appName ?? "the app")!"
     }
 }
 
