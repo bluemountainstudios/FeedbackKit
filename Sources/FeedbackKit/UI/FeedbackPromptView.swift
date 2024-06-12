@@ -122,15 +122,18 @@ public struct FeedbackPromptView: View {
             
             // Close Button
             if self.displayCloseButton {
-                HStack {
-                    Spacer()
-                    Button {
-                        self.onDismiss()
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button {
+                            self.onDismiss()
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                        }
+                        .tint(Color.secondary)
+                        .accessibilityLabel(Text("Close"))
                     }
-                    .tint(Color.secondary)
-                    .accessibilityLabel(Text("Close"))
+                    Spacer()
                 }
             }
         }
