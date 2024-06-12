@@ -104,7 +104,9 @@ public struct ProvideFeedbackView: View {
                                 .stroke(Color.secondary, lineWidth: 1.0)
                         }
                         .padding(2)
-                        
+#if os(visionOS)
+                        .background()
+#else
                         .toolbar {
                             ToolbarItemGroup(placement: .keyboard) {
                                 Spacer()
@@ -127,6 +129,7 @@ public struct ProvideFeedbackView: View {
                                 .disabled(model.feedbackMessage.isEmpty)
                             }
                         }
+#endif
 
                     Spacing()
 
