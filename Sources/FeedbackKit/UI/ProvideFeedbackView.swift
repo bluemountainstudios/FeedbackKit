@@ -47,7 +47,7 @@ public struct ProvideFeedbackView: View {
     }
 
     public var body: some View {
-        Group {
+        ZStack {
             switch self.model.state {
             case .enterFeedback:
                 EnterFeedbackView()
@@ -104,6 +104,7 @@ public struct ProvideFeedbackView: View {
                                 .stroke(Color.secondary, lineWidth: 1.0)
                         }
                         .padding(2)
+                        
                         .toolbar {
                             ToolbarItemGroup(placement: .keyboard) {
                                 Spacer()

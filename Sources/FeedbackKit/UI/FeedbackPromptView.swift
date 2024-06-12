@@ -28,6 +28,7 @@ public struct FeedbackPromptView: View {
 
     private let userID: String?
     private let isUserSubscribed: Bool?
+    private let displayCloseButton: Bool
 
     @Environment(\.openURL) var openURL
 
@@ -36,15 +37,30 @@ public struct FeedbackPromptView: View {
     public init(
         userID: String? = nil,
         isUserSubscribed: Bool? = nil,
+        displayCloseButton: Bool,
         onDismiss: @escaping () -> Void
     ) {
         self.userID = userID
         self.isUserSubscribed = isUserSubscribed
+        self.displayCloseButton = displayCloseButton
         self.onDismiss = onDismiss
     }
 
     public var body: some View {
         VStack {
+            if self.displayCloseButton {
+                HStack {
+                    Spacer()
+                    Button {
+                        self.onDismiss()
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                    }
+                    .tint(Color.secondary)
+                    .accessibilityLabel(Text("Close"))
+                }
+            }
+            
             switch self.state {
             case .initialPrompt(let showEntirePrompt):
                 InitialPromptView(showEntirePrompt: showEntirePrompt)
@@ -314,6 +330,7 @@ extension FeedbackPromptView {
 // MARK: - Preview
 #Preview {
     FeedbackPromptView(
+        displayCloseButton: true,
         onDismiss: {}
     )
 }
