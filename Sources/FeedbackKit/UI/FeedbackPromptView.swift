@@ -47,7 +47,80 @@ public struct FeedbackPromptView: View {
     }
 
     public var body: some View {
-        VStack {
+        ZStack {
+            VStack {
+                switch self.state {
+                case .initialPrompt(let showEntirePrompt):
+                    InitialPromptView(showEntirePrompt: showEntirePrompt)
+                        .transition(.slide)
+                case .collectFeedback:
+                    CollectFeedbackView()
+                        .transition(.scale)
+                case .feedbackResponseGreat:
+                    FeedbackResponseView(
+                        title: "✨ Awesome!",
+                        responseBody:
+                            """
+                            We’re thrilled that you're having a great time with \(self.appName)! Your support means the world to us.
+
+                            If you have a moment, would you mind leaving us a 5-star review? It helps us out a ton and helps other people discover \(self.appName)!
+
+                            Thank you so much for being a part of our community!
+
+                            Best,
+                            The \(self.appName) Team
+                            """,
+                        affirmativeButtonText: "Leave a Review",
+                        affirmativeButtonIcon: "star.bubble",
+                        affirmativeButtonAction: { self.openURL(appReviewURL) }
+                    )
+                        .transition(.scale)
+                case .feedbackResponseGood:
+                    FeedbackResponseView(
+                        title: "😎 Cool!",
+                        responseBody:
+                            """
+                            We're glad you're enjoying \(self.appName)!
+
+                            What are your favorite parts of the app, and what do you think we could do better? We'd love your feedback!
+                            """,
+                        affirmativeButtonText: "Provide Feedback",
+                        affirmativeButtonIcon: "captions.bubble",
+                        affirmativeButtonAction: { self.state = .collectFeedback }
+                    )
+                        .transition(.scale)
+                case .feedbackResponseOkay:
+                    FeedbackResponseView(
+                        title: "🙂 Nice!",
+                        responseBody:
+                            """
+                            Thanks for trying out \(self.appName)!
+
+                            Have any suggestions for things that we could make better? We'd appreciate your feedback so we can improve the app!
+                            """,
+                        affirmativeButtonText: "Provide Feedback",
+                        affirmativeButtonIcon: "captions.bubble",
+                        affirmativeButtonAction: { self.state = .collectFeedback }
+                    )
+                        .transition(.scale)
+                case .feedbackResponseBad:
+                    FeedbackResponseView(
+                        title: "😕 Sorry to Hear That!",
+                        responseBody:
+                            """
+                            Would you mind letting us know what we can improve to make the experience better?
+                            """,
+                        affirmativeButtonText: "Provide Feedback",
+                        affirmativeButtonIcon: "captions.bubble",
+                        affirmativeButtonAction: { self.state = .collectFeedback }
+                    )
+                        .transition(.scale)
+                case .noAppID:
+                    NoAppIDView()
+                }
+            }
+            
+            // Close Button
             if self.displayCloseButton {
                 HStack {
                     Spacer()
@@ -59,76 +132,6 @@ public struct FeedbackPromptView: View {
                     .tint(Color.secondary)
                     .accessibilityLabel(Text("Close"))
                 }
-            }
-            
-            switch self.state {
-            case .initialPrompt(let showEntirePrompt):
-                InitialPromptView(showEntirePrompt: showEntirePrompt)
-                    .transition(.slide)
-            case .collectFeedback:
-                CollectFeedbackView()
-                    .transition(.scale)
-            case .feedbackResponseGreat:
-                FeedbackResponseView(
-                    title: "✨ Awesome!",
-                    responseBody:
-                        """
-                        We’re thrilled that you're having a great time with \(self.appName)! Your support means the world to us.
-
-                        If you have a moment, would you mind leaving us a 5-star review? It helps us out a ton and helps other people discover \(self.appName)!
-
-                        Thank you so much for being a part of our community!
-
-                        Best,
-                        The \(self.appName) Team
-                        """,
-                    affirmativeButtonText: "Leave a Review",
-                    affirmativeButtonIcon: "star.bubble",
-                    affirmativeButtonAction: { self.openURL(appReviewURL) }
-                )
-                    .transition(.scale)
-            case .feedbackResponseGood:
-                FeedbackResponseView(
-                    title: "😎 Cool!",
-                    responseBody:
-                        """
-                        We're glad you're enjoying \(self.appName)!
-
-                        What are your favorite parts of the app, and what do you think we could do better? We'd love your feedback!
-                        """,
-                    affirmativeButtonText: "Provide Feedback",
-                    affirmativeButtonIcon: "captions.bubble",
-                    affirmativeButtonAction: { self.state = .collectFeedback }
-                )
-                    .transition(.scale)
-            case .feedbackResponseOkay:
-                FeedbackResponseView(
-                    title: "🙂 Nice!",
-                    responseBody:
-                        """
-                        Thanks for trying out \(self.appName)!
-
-                        Have any suggestions for things that we could make better? We'd appreciate your feedback so we can improve the app!
-                        """,
-                    affirmativeButtonText: "Provide Feedback",
-                    affirmativeButtonIcon: "captions.bubble",
-                    affirmativeButtonAction: { self.state = .collectFeedback }
-                )
-                    .transition(.scale)
-            case .feedbackResponseBad:
-                FeedbackResponseView(
-                    title: "😕 Sorry to Hear That!",
-                    responseBody:
-                        """
-                        Would you mind letting us know what we can improve to make the experience better?
-                        """,
-                    affirmativeButtonText: "Provide Feedback",
-                    affirmativeButtonIcon: "captions.bubble",
-                    affirmativeButtonAction: { self.state = .collectFeedback }
-                )
-                    .transition(.scale)
-            case .noAppID:
-                NoAppIDView()
             }
         }
         .padding(.horizontal)
