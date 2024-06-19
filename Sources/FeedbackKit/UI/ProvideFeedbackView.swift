@@ -29,13 +29,15 @@ public struct ProvideFeedbackView: View {
         showText: Bool = true,
         userID: String? = nil,
         isUserSubscribed: Bool? = nil,
-        onDismiss: (() -> Void)? = nil
+        onDismiss: (() -> Void)? = nil,
+        onSubmitFeedback: (() -> Void)? = nil
     ) {
         self.showTextOnInitialPrompt = showText
         self.copy = copy
         model.feedbackType = feedbackType
         model.userID = userID
         model.onDismiss = onDismiss
+        model.onSubmitFeedback = onSubmitFeedback
         model.isUserSubscribed = isUserSubscribed
     }
 
@@ -329,6 +331,7 @@ class ProvideFeedbackViewModel {
 
     var feedbackType: FeedbackType?
     var onDismiss: (() -> Void)?
+    var onSubmitFeedback: (() -> Void)?
     var state: ProvideFeedbackView.ViewState
 
     var feedbackMessage: String = ""
@@ -355,6 +358,7 @@ class ProvideFeedbackViewModel {
                 feedbackType: self.feedbackType
             )
             try await FeedbackKitBackend.post(feedback: feedback)
+            self.onSubmitFeedback?()
             self.state = .successfullyPostedFeedback
         } catch {
             self.state = .failedToPostFeedback

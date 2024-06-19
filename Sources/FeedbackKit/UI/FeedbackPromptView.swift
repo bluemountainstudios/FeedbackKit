@@ -33,17 +33,20 @@ public struct FeedbackPromptView: View {
     @Environment(\.openURL) var openURL
 
     let onDismiss: () -> Void
+    let onSubmitFeedback: (() -> Void)?
 
     public init(
         userID: String? = nil,
         isUserSubscribed: Bool? = nil,
         displayCloseButton: Bool,
-        onDismiss: @escaping () -> Void
+        onDismiss: @escaping () -> Void,
+        onSubmitFeedback: (() -> Void)? = nil
     ) {
         self.userID = userID
         self.isUserSubscribed = isUserSubscribed
         self.displayCloseButton = displayCloseButton
         self.onDismiss = onDismiss
+        self.onSubmitFeedback = onSubmitFeedback
     }
 
     public var body: some View {
@@ -308,7 +311,8 @@ extension FeedbackPromptView {
             showText: false,
             userID: userID,
             isUserSubscribed: self.isUserSubscribed,
-            onDismiss: { self.onDismiss() }
+            onDismiss: { self.onDismiss() },
+            onSubmitFeedback: { self.onSubmitFeedback?() }
         )
     }
 }
